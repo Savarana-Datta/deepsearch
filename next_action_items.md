@@ -1,0 +1,6 @@
+- Think about the agent flows. 
+    - I think we should do the sub task verification first and then the expansion of each task. 
+- Maintain parallel threads for each sub task.
+- Multiturn according the user response.
+- Work on next agents. Yes/No agent. 
+- Tools like scrapers and labellers.
