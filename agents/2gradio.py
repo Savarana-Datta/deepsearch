@@ -175,7 +175,7 @@ def run_pipeline(query):
         final_results = [None] * len(futures)
         for idx, future in enumerate(futures):
             final_results[idx] = future.result()  # Block until the result is ready (in order)
-            final_report_output = "Final Report:\n" + "\n".join(final_results[:idx+1])
+            final_report_output = "" + "\n".join(final_results[:idx+1])
             yield high_level_output, reasoning_output, final_report_output
 
 # Create a Gradio interface with three output boxes.
@@ -185,7 +185,7 @@ iface = gr.Interface(
     outputs=[
         gr.Textbox(label="High-level Plan"),
         gr.Textbox(label="Detailed Reasoning Plan"),
-        gr.Textbox(label="Final Report")
+        gr.Textbox(label="Final Answer")
     ],
     title="Multi-Agent Research Pipeline",
     description="Enter your research query and hit submit. The final report will stream as each task completes in order."

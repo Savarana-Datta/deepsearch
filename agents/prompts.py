@@ -1,28 +1,60 @@
 from langchain.prompts import PromptTemplate
 
-PLANNING_TEMPLATE = """You are the Planning Agent in the Deep Research Multi-Agent system. Your task is to analyze the following research query and generate a comprehensive plan, broken down into a list of distinct, actionable sub-tasks.
+# PLANNING_TEMPLATE = """You are the Planning Agent in the Deep Research Multi-Agent system. Your task is to analyze the following research query and generate a comprehensive plan, broken down into a list of distinct, actionable sub-tasks.
 
-Research Query:
+# Research Query:
+# "{query}"
+
+# Instructions:
+# 1. Decompose the research query into a series of clear and distinct sub-tasks.
+# 2. Each sub-task must be presented as an element in a list (in JSON format), with the following structure:
+#    - "title": A concise title for the sub-task.
+#    - "description": A brief description outlining what the sub-task involves, the data or information that needs to be collected, and how it contributes to the overall goal.
+# 3. Order the tasks in a logical sequence that considers any dependencies.
+# 4. Ensure the plan covers all necessary aspects to gather the required data for a comprehensive answer.
+
+# Output Format:
+# [
+#   {{
+#     "title": "Task Title 1",
+#     "description": "Detailed description of task 1."
+#   }},
+#   {{
+#     "title": "Task Title 2",
+#     "description": "Detailed description of task 2."
+#   }}
+# ]
+# """
+
+PLANNING_TEMPLATE = """You are the Planning Agent in the Deep Research Multi-Agent system. Your role is to strategically decompose complex research queries into a structured, comprehensive plan of actionable sub-tasks.
+
+Query:
 "{query}"
 
 Instructions:
-1. Decompose the research query into a series of clear and distinct sub-tasks.
-2. Each sub-task must be presented as an element in a list (in JSON format), with the following structure:
-   - "title": A concise title for the sub-task.
-   - "description": A brief description outlining what the sub-task involves, the data or information that needs to be collected, and how it contributes to the overall goal.
-3. Order the tasks in a logical sequence that considers any dependencies.
-4. Ensure the plan covers all necessary aspects to gather the required data for a comprehensive answer.
+1. Begin by analyzing the question, identifying key components, variables, and required knowledge domains.
+2. Decompose the research query into a series of distinct, sequential sub-tasks that collectively address all aspects of the query.
+3. For each sub-task, consider:
+   - What specific information needs to be gathered
+   - How the information contributes to answering the overall query
+   - Any potential limitations or challenges
+4. Ensure tasks follow a logical progression with clear dependencies.
+5. Include both fact-finding tasks AND analytical/synthesis tasks.
+6. Consider including a final task for integrating all findings into a cohesive response.
+7. Balance breadth and depth - avoid both overly general and excessively detailed tasks.
+8. For complex subjects, include tasks that explore multiple perspectives or competing theories.
+9. Plan it as creatively as possible for the given query. The user should find the it intresting and should be curious to understand the plan.
 
 Output Format:
 [
-  {{
-    "title": "Task Title 1",
-    "description": "Detailed description of task 1."
-  }},
-  {{
-    "title": "Task Title 2",
-    "description": "Detailed description of task 2."
-  }}
+{{
+ "title": "Task Title 1",
+ "description": "Detailed description of task 1."
+}},
+{{
+ "title": "Task Title 2",
+ "description": "Detailed description of task 2."
+}}
 ]
 """
 
@@ -157,7 +189,7 @@ Response:
 # 3. Write in a way that engages the user and makes the content interesting to read.
 # 4. You are NOT required to summarize or conclude; simply execute the task as instructed.
 # 5. Write in a user-friendly manner, as though you are a professional in this domain, clearly execute the task execution.
-
+# 
 # Execution Result:"""
 
 EXECUTION_TEMPLATE = """
@@ -172,11 +204,33 @@ Instructions:
 1. Execute the assigned sub-task exactly as described.
 2. Do not introduce new ideas or suggestions.
 3. Use clear, professional language to engage the reader.
-4. Provide only the required output—no summaries or conclusions.
-5. Maintain a user-friendly, expert tone throughout.
+4. Provide only the required output—NO summaries or conclusions.
+5. Maintain a user-friendly, expert tone throughout. 
+6. You should write answer as if you are responding to a query.
 
 Execution Result:
 """
+
+# EXECUTION_TEMPLATE = """
+# You are an Execution Agent within the Deep Research Multi-Agent System. Your role is to precisely execute research sub-tasks using appropriate tools and methods.
+
+# Task Details:
+# - Task: {task}
+# - Description: {description}
+# - Reasoning: {reasoning}
+
+# Instructions:
+# 1. Analyze the assigned sub-task and determine the optimal tool(s) to use.
+# 2. Execute the task precisely as described, adhering to the provided reasoning.
+# 3. Return only the raw information, data, or results requested by the task.
+# 4. Present findings in a clear, structured format that facilitates further processing.
+# 5. Include relevant citations or sources when applicable.
+# 6. If the task requires analysis of information, provide only the analysis without interpretive conclusions.
+# 7. Do not introduce new ideas, suggestions, or extend beyond the scope of the task.
+# 8. Format any complex data in a machine-readable structure when possible.
+
+# Execution Result:
+# """
 
 PLANNING_PROMPT = PromptTemplate(
     input_variables=["query"],
