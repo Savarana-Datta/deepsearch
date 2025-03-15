@@ -10,6 +10,8 @@ from concurrent.futures import ThreadPoolExecutor
 from tools import *
 
 from pprint import pprint
+# from langchain_community.llms import Together
+from together import Together
 
 load_dotenv()
 
@@ -29,9 +31,12 @@ llm_o3 = ChatOpenAI(
     openai_api_key=openai_api_key,
     max_tokens=3200
 )
+
+together_api_key = os.getenv("TOGETHER_AI")
+
 class PlanningAgent:
     def __init__(self):
-        self.chain = LLMChain(llm=llm_4o, prompt=PLANNING_PROMPT)
+        self.chain = LLMChain(llm=llm_o3, prompt=PLANNING_PROMPT)
     def parse_plan_json(self, json_str):
         try:
             start_index = json_str.find('[')

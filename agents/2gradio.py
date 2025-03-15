@@ -33,7 +33,7 @@ llm_o3 = ChatOpenAI(
 
 class PlanningAgent:
     def __init__(self):
-        self.chain = LLMChain(llm=llm_4o, prompt=PLANNING_PROMPT)
+        self.chain = LLMChain(llm=llm_o3, prompt=PLANNING_PROMPT)
     def parse_plan_json(self, json_str):
         try:
             start_index = json_str.find('[')
@@ -77,7 +77,7 @@ class ExecutionAgent:
         self.chain = LLMChain(llm=llm_4o, prompt=EXECUTION_PROMPT)
     
     def execute_task(self, task_title, task_description, task_reasoning, retries=3):
-        search_query = task_description  # Use task description as the search query
+        search_query = task_description
         print("Performing web search for:", search_query)
         try:
             web_data = get_web_content_from_query(search_query, num_results=6)
@@ -165,6 +165,18 @@ def run_pipeline(query):
     while confirmation.strip() != 'Proceed' and attempts < 2:
         suggestion = confirmation.split(':')[1] if ':' in confirmation else ""
         plan = replanning_agent.generate_plan(query, plan, suggestion)
+        print("Rerunning")
+        print(plan)
+        combined_plan = ["Task:" + pl['title'] + '\n' + "Description:" + pl['description'] for pl in plan]
+        combined_plan = '\n'.join(combined_plan)
+        with ThreadPoolExecutor() as executor:
+            reasoning_results = list(executor.map(generate_reasoning_for_task, plan))
+    
+        reasoning_output = ""
+        for idx, reasoning in enumerate(reasoning_results):
+            plan[idx]['reasoning'] = reasoning
+            reasoning_output += f"Task: {plan[idx]['title']}\nReasoning: {reasoning}\n\n"
+        yield high_level_output, reasoning_output, ""
         confirmation = confirmation_agent.get_confirmation(plan, query)
         attempts += 1
     

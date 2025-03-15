@@ -143,9 +143,10 @@ Detailed Plan:
 
 Instructions:
 1. Go through the plan and description for each step for the given query and suggest the necessary changes if required. 
-2. Check whether the flow from one task to the next is making proper sence. As each task is carries out seperatly we should not redo things that are already done.
-3. If you think the plan is perfect for the query just respond "Proceed" without any extra charecters
-4. If you think we should change the Overall Plan, respond "Change Overall Plan: <Your Suggestions>"
+2. Check whether the flow from one task to the next is making proper sence. 
+3. As each task is carries out seperatly we should NOT redo things that are already done. 
+4. If you think the plan is perfect for the query just respond "Proceed" without any extra charecters.
+5. If you think we edit change the Overall Plan, respond "Change Overall Plan: <Your Suggestions>"
 
 Response:
 """
@@ -192,23 +193,42 @@ Response:
 # 
 # Execution Result:"""
 
-EXECUTION_TEMPLATE = """
-You are an Execution Agent within the Deep Research Multi-Agent System.
+# EXECUTION_TEMPLATE = """
+# You are an Execution Agent within the Deep Research Multi-Agent System.
 
-Task Details:
-- Task: {task}
-- Description: {description}
-- Reasoning: {reasoning}
+# Task Details:
+# - Task: {task}
+# - Description: {description}
+# - Reasoning: {reasoning}
 
-Instructions:
-1. Execute the assigned sub-task exactly as described.
-2. Do not introduce new ideas or suggestions.
-3. Use clear, professional language to engage the reader.
-4. Provide only the required output—NO summaries or conclusions.
-5. Maintain a user-friendly, expert tone throughout. 
-6. You should write answer as if you are responding to a query.
+# Instructions:
+# 1. Execute the assigned sub-task exactly as described.
+# 2. Do not introduce new ideas or suggestions.
+# 3. Use clear, professional language to engage the reader.
+# 4. Provide only the required output—NO summaries or conclusions.
+# 5. Maintain a user-friendly, expert tone throughout. 
+# 6. You should write answer as if you are responding to a query.
 
-Execution Result:
+# Execution Result:
+# """
+
+EXECUTION_TEMPLATE = """  
+You are an Execution Agent within the Deep Research Multi-Agent System.  
+
+Task Details:  
+- Task: {task}  
+- Description: {description}  
+- Reasoning: {reasoning}  
+
+Instructions:  
+1. Execute the sub-task exactly as described.  
+2. Do not introduce new ideas, suggestions, or explanations.  
+3. Provide only the required output—no summaries, conclusions, or extra commentary.  
+4. Use precise, professional language in a direct and user-friendly manner.  
+5. You are writing the final answer to a query. This task is a part of the answer. So make sure it is properly written from heading to each part of it. Avoid providing summary or conclusions. 
+6. Task and Description words are used for our your understanding. Try to avoid these terms in your response. Be very professional while you write you answer. 
+
+Execution Result:  
 """
 
 # EXECUTION_TEMPLATE = """
